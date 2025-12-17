@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Año Nuevo 2026</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0033cc, #cc0000);
+      color: #ffffff;
+      font-family: system-ui, Arial, sans-serif;
+      overflow: hidden;
+      transition: background 1s ease;
+    }
+    h1 {
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 12px rgba(0,0,0,.5);
+    }
+    #timer {
+      font-size: 2rem;
+      background: rgba(0,0,0,.35);
+      padding: 12px 22px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+    }
+    #final {
+      font-size: 5rem;
+      font-weight: bold;
+      animation: zoom 1s infinite alternate;
+      display: none;
+    }
+    @keyframes zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.2); }
+    }
+    .boton {
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #ffd166;
+      color: #1f2937;
+      box-shadow: 0 10px 25px rgba(0,0,0,.3);
+    }
+    .firework {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      box-shadow:
+        0 0 #ff0,
+        12px 0 #f00,
+        -12px 0 #0f0,
+        0 12px #0ff,
+        0 -12px #f0f;
+      animation: boom 1s ease-out forwards;
+    }
+    @keyframes boom {
+      from { transform: scale(0); opacity: 1; }
+      to { transform: scale(4); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎆 Año Nuevo 2026 🎆</h1>
+  <div id="timer">Cargando temporizador…</div>
+  <div id="final">Feliz 2026 🎉</div><button class="boton" onclick="reproducirMusica()">🎶 Música de Año Nuevo</button>
+
+  <!-- Música distinta a Navidad --><audio id="musica" src="year-new.mp3" preload="auto"></audio>
+
+  <script>
+    const destino = new Date('January 1, 2026 00:00:00').getTime();
+    const timer = document.getElementById('timer');
+    const final = document.getElementById('final');
+    const musica = document.getElementById('musica');
+    let celebrado = false;
+
+    setInterval(() => {
+      const ahora = new Date().getTime();
+      const diff = destino - ahora;
+
+      if (diff <= 10000 && diff > 0) {
+        const segundos = Math.ceil(diff / 1000);
+        timer.textContent = segundos;
+      }
+
+      if (diff <= 0 && !celebrado) {
+        celebrado = true;
+        timer.style.display = 'none';
+        final.style.display = 'block';
+        musica.currentTime = 0;
+        musica.play();
+        iniciarFuegos();
+        document.body.style.background = "url('https://images.unsplash.com/photo-1513151233558-d860c5398176') center/cover no-repeat";
+        return;
+      }
+
+      if (diff > 10000) {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        timer.textContent = `${d}d ${h}h ${m}m ${s}s`;
+      }
+    }, 1000);
+
+    function reproducirMusica() {
+      musica.currentTime = 0;
+      musica.play();
+    }
+
+    function iniciarFuegos() {
+      setInterval(() => {
+        for (let i = 0; i < 14; i++) {
+          const f = document.createElement('div');
+          f.className = 'firework';
+          f.style.left = Math.random() * window.innerWidth + 'px';
+          f.style.top = Math.random() * window.innerHeight + 'px';
+          document.body.appendChild(f);
+          setTimeout(() => f.remove(), 1000);
+        }
+      }, 500);
+    }
+  </script></body>
+</html>
